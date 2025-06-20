@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
+import CalorieCalculator from "./components/CalorieCalculator";
 import Home from "./pages/Home";
 import CustomBowl from "./pages/CustomBowl";
 import Menu from "./pages/Menu";
@@ -22,6 +23,7 @@ function App() {
               <Route path="/menu" element={<Menu />} />
             </Routes>
           </main>
+          <CalorieCalculator />
         </div>
       </Router>
     </ThemeProvider>
