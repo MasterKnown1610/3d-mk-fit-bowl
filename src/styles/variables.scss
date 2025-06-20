@@ -1,0 +1,63 @@
+// Colors
+$primary-color: #4caf50;
+$secondary-color: #000000;
+$text-color: #ffffff;
+$background-color: #000000;
+$border-radius: 8px;
+$box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+// Breakpoints
+$mobile: 768px;
+$tablet: 1024px;
+$desktop: 1024px;
+
+// Spacing
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 1.5rem;
+$spacing-lg: 2rem;
+$spacing-xl: 3rem;
+
+// Shadows
+$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+// Theme Colors
+:root {
+  // Light Theme (default)
+  --primary-color: #{$primary-color};
+  --secondary-color: #{$secondary-color};
+  --text-color: #{$text-color};
+  --background-color: #{$background-color};
+  --card-background: #1a1a1a;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --gradient-start: #4caf50;
+  --gradient-middle: #66bb6a;
+  --gradient-end: #ffffff;
+  --text-gradient: linear-gradient(135deg, #4caf50 0%, #ffffff 100%);
+}
+
+[data-theme="dark"] {
+  --primary-color: #66bb6a;
+  --secondary-color: #000000;
+  --text-color: #ffffff;
+  --background-color: #000000;
+  --card-background: #1a1a1a;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --gradient-start: #1a1a1a;
+  --gradient-middle: #2d2d2d;
+  --gradient-end: #1a1a1a;
+  --text-gradient: linear-gradient(135deg, #4caf50 0%, #ffffff 100%);
+}
+
+// Additional theme classes for more specific styling
+body.dark-mode {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+body.light-mode {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
