@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import DynamicBowl3D from "../components/DynamicBowl3D";
 import "../styles/CustomBowl.scss";
 
 // Diet to allowed options mapping
@@ -304,6 +306,29 @@ const options = {
   ],
 };
 
+const regionOptions = [
+  {
+    id: "north",
+    name: "North Indian",
+    description: "Rich flavors with aromatic spices",
+    image:
+      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop&q=60",
+    icon: "🍛",
+    features: ["Butter Chicken", "Paneer Dishes", "Biryani", "Naan Bread"],
+    color: "#FF6B6B",
+  },
+  {
+    id: "south",
+    name: "South Indian",
+    description: "Fresh and tangy with coconut flavors",
+    image:
+      "https://images.unsplash.com/photo-1506089676908-3592f7389d4d?w=400&auto=format&fit=crop&q=60",
+    icon: "🥥",
+    features: ["Sambar", "Coconut Chutney", "Idli", "Dosa"],
+    color: "#4ECDC4",
+  },
+];
+
 const CustomBowl = () => {
   const [searchParams] = useSearchParams();
   const dietId = parseInt(searchParams.get("diet"), 10);
@@ -406,24 +431,86 @@ const CustomBowl = () => {
         <h1>Build Your Bowl</h1>
         {/* Step 1: Region selection */}
         {!region ? (
-          <div className="region-select">
-            <h2>Choose your style</h2>
-            <div className="region-buttons">
-              {filteredOptions.region.map((r) => (
-                <button
+          <motion.div
+            className="region-select"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="region-header">
+              <motion.h2
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                Choose Your Favorite Style
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="region-subtitle"
+              >
+                Select your preferred cuisine style to customize your healthy
+                bowl
+              </motion.p>
+            </div>
+
+            <div className="region-cards">
+              {regionOptions.map((r, index) => (
+                <motion.div
                   key={r.id}
-                  className="btn btn-primary"
+                  className="region-card"
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6 + index * 0.2 }}
+                  whileHover={{ y: -10, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => setRegion(r.id)}
                 >
-                  {r.name}
-                </button>
+                  <div className="region-card-image">
+                    <img src={r.image} alt={r.name} />
+                    <div
+                      className="region-card-overlay"
+                      style={{ backgroundColor: r.color + "20" }}
+                    >
+                      <span className="region-icon">{r.icon}</span>
+                    </div>
+                  </div>
+                  <div className="region-card-content">
+                    <h3>{r.name}</h3>
+                    <p className="region-description">{r.description}</p>
+                    <div className="region-features">
+                      {r.features.map((feature, idx) => (
+                        <span key={idx} className="feature-tag">
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="region-select-btn">
+                      <span>Select Style</span>
+                      <span className="arrow">→</span>
+                    </div>
+                  </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         ) : (
-          <div className="bowl-builder new-layout">
+          <motion.div
+            className="bowl-builder new-layout"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
             {/* Left: All items */}
             <div className="selections new-selections">
+              <div className="selections-header">
+                <h2>Customize Your Bowl</h2>
+                <p>
+                  Select your preferred ingredients for a perfect healthy meal
+                </p>
+              </div>
               {Object.entries(filteredOptions)
                 .filter(([cat]) => cat !== "region")
                 .map(([category, items]) => (
@@ -438,38 +525,60 @@ const CustomBowl = () => {
                             i.category === category && i.item.id === item.id
                         ).length;
                         return (
-                          <div
+                          <motion.div
                             key={item.id}
                             className={`item-card${
                               count > 0 ? " selected" : ""
                             }`}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                           >
-                            <div className="item-info">
-                              <span>{item.name}</span>
-                              <span className="item-calories">
-                                {item.calories} kcal
-                              </span>
-                              {count > 0 && (
-                                <span className="item-count">x{count}</span>
-                              )}
+                            <div className="item-header">
+                              <span className="item-icon">{item.icon}</span>
+                              <div className="item-info">
+                                <h4>{item.name}</h4>
+                                <div className="item-nutrition">
+                                  <span className="calories">
+                                    {item.calories} kcal
+                                  </span>
+                                  <span className="protein">
+                                    P: {item.protein}g
+                                  </span>
+                                  <span className="carbs">
+                                    C: {item.carbs}g
+                                  </span>
+                                  <span className="fat">F: {item.fat}g</span>
+                                </div>
+                              </div>
+                              <div className="item-price">₹{item.price}</div>
                             </div>
-                            <button
-                              className="btn btn-sm btn-outline"
-                              onClick={() => handleAddItem(category, item)}
-                            >
-                              Add
-                            </button>
-                            {count > 0 && (
-                              <button
-                                className="btn btn-sm btn-danger"
-                                onClick={() =>
-                                  handleRemoveItem(category, item.id)
-                                }
+
+                            <div className="item-actions">
+                              {count > 0 && (
+                                <motion.button
+                                  className="btn btn-sm btn-danger"
+                                  onClick={() =>
+                                    handleRemoveItem(category, item.id)
+                                  }
+                                  whileHover={{ scale: 1.1 }}
+                                  whileTap={{ scale: 0.9 }}
+                                >
+                                  <span>−</span>
+                                </motion.button>
+                              )}
+                              <span className="item-count-display">
+                                {count > 0 ? count : 0}
+                              </span>
+                              <motion.button
+                                className="btn btn-sm btn-primary"
+                                onClick={() => handleAddItem(category, item)}
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
                               >
-                                Remove
-                              </button>
-                            )}
-                          </div>
+                                <span>+</span>
+                              </motion.button>
+                            </div>
+                          </motion.div>
                         );
                       })}
                     </div>
@@ -478,94 +587,68 @@ const CustomBowl = () => {
             </div>
             {/* Right: Bowl visualization */}
             <div className="preview new-preview">
-              <h3>Your Bowl</h3>
-              <div className="bowl-svg-container big-bowl">
-                <svg
-                  width="100%"
-                  height="auto"
-                  viewBox="0 0 400 200"
-                  preserveAspectRatio="xMidYMid meet"
-                  style={{ display: "block", maxWidth: "100%", height: "auto" }}
-                >
-                  <ellipse
-                    cx="200"
-                    cy="150"
-                    rx="180"
-                    ry="45"
-                    fill="#f5e6c8"
-                    stroke="#bfa76f"
-                    strokeWidth="8"
-                  />
-                  {/* Items as chips inside the bowl */}
-                  {selectedItems.map((i, idx) => (
-                    <g key={idx}>
-                      {i.item.svg ? (
-                        <foreignObject
-                          x={50 + (idx % 6) * 55}
-                          y={134 - Math.floor(idx / 6) * 35}
-                          width="48"
-                          height="24"
-                        >
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              width: "100%",
-                              height: "100%",
-                            }}
-                            dangerouslySetInnerHTML={{ __html: i.item.svg }}
-                          />
-                        </foreignObject>
-                      ) : (
-                        <text
-                          x={80 + (idx % 6) * 55}
-                          y={148 - Math.floor(idx / 6) * 35}
-                          textAnchor="middle"
-                          fontSize="22"
-                          dominantBaseline="middle"
-                        >
-                          {i.item.icon}
-                        </text>
-                      )}
-                    </g>
-                  ))}
-                </svg>
+              <div className="preview-header">
+                <h3>Your Custom Bowl</h3>
+                <p>See your creation come to life</p>
+              </div>
+              <div className="bowl-3d-container big-bowl">
+                <DynamicBowl3D selectedItems={selectedItems} />
               </div>
               <div className="nutrition-checkout-card">
-                <h4>Nutrition</h4>
+                <div className="nutrition-header">
+                  <h4>Nutrition Summary</h4>
+                  <div className="nutrition-icon">🥗</div>
+                </div>
                 <div className="nutrition-values">
                   <div className="nutrition-item">
-                    <span>Calories</span>
+                    <div className="nutrition-label">
+                      <span className="nutrition-icon">🔥</span>
+                      <span>Calories</span>
+                    </div>
                     <strong>{nutrition.calories} kcal</strong>
                   </div>
                   <div className="nutrition-item">
-                    <span>Protein</span>
+                    <div className="nutrition-label">
+                      <span className="nutrition-icon">💪</span>
+                      <span>Protein</span>
+                    </div>
                     <strong>{nutrition.protein}g</strong>
                   </div>
                   <div className="nutrition-item">
-                    <span>Carbs</span>
+                    <div className="nutrition-label">
+                      <span className="nutrition-icon">🌾</span>
+                      <span>Carbs</span>
+                    </div>
                     <strong>{nutrition.carbs}g</strong>
                   </div>
                   <div className="nutrition-item">
-                    <span>Fat</span>
+                    <div className="nutrition-label">
+                      <span className="nutrition-icon">🥑</span>
+                      <span>Fat</span>
+                    </div>
                     <strong>{nutrition.fat}g</strong>
                   </div>
                   <div className="nutrition-item price">
-                    <span>Price</span>
+                    <div className="nutrition-label">
+                      <span className="nutrition-icon">💰</span>
+                      <span>Total Price</span>
+                    </div>
                     <strong>₹{nutrition.price}</strong>
                   </div>
                 </div>
-                <button
+                <motion.button
                   className="btn btn-primary checkout-btn"
                   onClick={handleOrder}
                   disabled={selectedItems.length === 0}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Book This Bowl
-                </button>
+                  <span>Book This Bowl</span>
+                  <span className="checkout-icon">🛒</span>
+                </motion.button>
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

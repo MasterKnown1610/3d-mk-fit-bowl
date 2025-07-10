@@ -257,7 +257,7 @@ const Home = () => {
                       </span>
                     ))}
                   </div> */}
-                  <Link to={`/custom-bowl?diet=${diet.id}`} className="btn">
+                  <Link to={`/menu?diet=${diet.id}`} className="btn">
                     View Plans
                   </Link>
                 </div>

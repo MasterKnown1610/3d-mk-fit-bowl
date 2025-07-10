@@ -1,5 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import "../styles/Menu.scss";
+
+// Mapping from diet plan IDs to menu categories
+const dietToCategoryMap = {
+  1: "Weight Loss", // Weight Loss Diet
+  2: "Weight Gain", // Muscle Gain Diet
+  3: "Diabetic-Friendly", // Diabetic-Friendly Diet
+  4: "PCOS/PCOD", // PCOS/PCOD-Friendly Diet
+  5: "Heart-Healthy", // Heart-Healthy Diet
+  6: "Keto", // Gluten-Free Diet (mapped to Keto as closest match)
+};
 
 const categories = [
   "All",
@@ -335,7 +346,18 @@ const menuItems = [
 ];
 
 const Menu = () => {
+  const [searchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState("All");
+
+  useEffect(() => {
+    const dietId = searchParams.get("diet");
+    if (dietId) {
+      const category = dietToCategoryMap[dietId];
+      if (category) {
+        setSelectedCategory(category);
+      }
+    }
+  }, [searchParams]);
 
   const filteredItems =
     selectedCategory === "All"
